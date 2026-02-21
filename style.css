@@ -9,6 +9,8 @@
   --ball: #ff9f47;
   --bonus: #ff5858;
   --shadow: rgba(0, 0, 0, 0.12);
+  --field-bg: #ffffff;
+  --field-border: #c8c8c8;
 }
 
 :root[data-theme="dark"] {
@@ -22,6 +24,8 @@
   --ball: #f2a93b;
   --bonus: #ff6a6a;
   --shadow: rgba(0, 0, 0, 0.35);
+  --field-bg: #212733;
+  --field-border: #4f5a70;
 }
 
 * {
@@ -125,4 +129,46 @@ h2 {
 .bonus {
   margin: 0 auto;
   background: var(--bonus);
+}
+
+.inquiry-section {
+  margin-top: 26px;
+  text-align: left;
+}
+
+.inquiry-form {
+  display: grid;
+  gap: 8px;
+}
+
+.inquiry-form label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.inquiry-form input,
+.inquiry-form textarea {
+  width: 100%;
+  border: 1px solid var(--field-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--field-bg);
+}
+
+.submit-button {
+  margin-top: 4px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 11px 16px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background: var(--accent-dark);
 }
