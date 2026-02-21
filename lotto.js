@@ -8,7 +8,6 @@ const commentMessageInput = document.getElementById("comment-message");
 const commentStatus = document.getElementById("comment-status");
 const commentList = document.getElementById("comment-list");
 const root = document.documentElement;
-let firebaseConfig;
 
 const SUN_ICON = `
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -144,18 +143,6 @@ function loadScript(src) {
   });
 }
 
-async function loadFirebaseConfig() {
-  if (firebaseConfig) {
-    return firebaseConfig;
-  }
-  const response = await fetch("/__/firebase/init.json");
-  if (!response.ok) {
-    throw new Error("Firebase 설정 응답이 올바르지 않습니다.");
-  }
-  firebaseConfig = await response.json();
-  return firebaseConfig;
-}
-
 async function ensureFirebaseReady() {
   if (!window.firebase) {
     await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js");
@@ -165,16 +152,9 @@ async function ensureFirebaseReady() {
   }
 
   if (!firebase.apps || !firebase.apps.length) {
-    try {
-      const config = await loadFirebaseConfig();
-      firebase.initializeApp(config);
-    } catch (error) {
-      // Fallback: Firebase Hosting에서 제공하는 init.js 사용
-      try {
-        await loadScript("/__/firebase/init.js");
-      } catch (initError) {
-        throw error;
-      }
+    await loadScript("/__/firebase/init.js");
+    if (!firebase.apps || !firebase.apps.length) {
+      throw new Error("Firebase 초기화 스크립트를 불러오지 못했습니다.");
     }
   }
 
