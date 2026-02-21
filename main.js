@@ -114,13 +114,46 @@ function setCommentStatus(message) {
   commentStatus.textContent = message;
 }
 
-function initFirebaseComments() {
-  if (!window.firebase || !firebase.firestore) {
-    setCommentStatus("Firebase 초기화에 실패했습니다.");
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error(`스크립트 로드 실패: ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+async function ensureFirebaseReady() {
+  if (!window.firebase) {
+    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js");
+    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js");
+  } else if (!firebase.firestore) {
+    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js");
+  }
+
+  if (!firebase.apps || !firebase.apps.length) {
+    const response = await fetch("/__/firebase/init.json");
+    if (!response.ok) {
+      throw new Error("Firebase 설정 정보를 가져오지 못했습니다.");
+    }
+    const config = await response.json();
+    firebase.initializeApp(config);
+  }
+
+  return firebase.firestore();
+}
+
+async function initFirebaseComments() {
+  let db;
+  try {
+    db = await ensureFirebaseReady();
+  } catch (error) {
+    setCommentStatus("Firebase 초기화에 실패했습니다. Firebase Hosting 배포 상태를 확인해 주세요.");
     return;
   }
 
-  const db = firebase.firestore();
   const commentsRef = db.collection("lotto-comments");
 
   commentsRef
