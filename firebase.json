@@ -3,6 +3,7 @@
     "rules": "firestore.rules"
   },
   "hosting": {
+    "site": "productionbuilderweek1",
     "public": ".",
     "ignore": [
       "firebase.json",
