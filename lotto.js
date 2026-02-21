@@ -152,9 +152,24 @@ async function ensureFirebaseReady() {
   }
 
   if (!firebase.apps || !firebase.apps.length) {
-    await loadScript("/__/firebase/init.js");
+    let initError;
+    try {
+      await loadScript("/__/firebase/init.js");
+    } catch (error) {
+      initError = error;
+    }
+
     if (!firebase.apps || !firebase.apps.length) {
-      throw new Error("Firebase 초기화 스크립트를 불러오지 못했습니다.");
+      try {
+        const response = await fetch("/__/firebase/init.json");
+        if (!response.ok) {
+          throw new Error("Firebase 설정 응답이 올바르지 않습니다.");
+        }
+        const config = await response.json();
+        firebase.initializeApp(config);
+      } catch (error) {
+        throw initError || error;
+      }
     }
   }
 
