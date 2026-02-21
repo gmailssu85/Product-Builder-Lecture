@@ -136,7 +136,7 @@ function loadScript(src) {
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
     script.src = src;
-    script.async = true;
+    script.async = false;
     script.onload = resolve;
     script.onerror = () => reject(new Error(`스크립트 로드 실패: ${src}`));
     document.head.appendChild(script);
