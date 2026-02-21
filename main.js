@@ -8,6 +8,15 @@ const commentMessageInput = document.getElementById("comment-message");
 const commentStatus = document.getElementById("comment-status");
 const commentList = document.getElementById("comment-list");
 const root = document.documentElement;
+const FIREBASE_CONFIG = {
+  projectId: "productionbuilderweek1",
+  appId: "1:891804464676:web:b4fd2ec6cd11a07afa8ab1",
+  storageBucket: "productionbuilderweek1.firebasestorage.app",
+  apiKey: "AIzaSyCPrsyRzWVLfAwkRWS1-mef2JTH4CD5bjo",
+  authDomain: "productionbuilderweek1.firebaseapp.com",
+  messagingSenderId: "891804464676",
+  measurementId: "G-NDXNPFHGBL",
+};
 
 function setTheme(theme) {
   root.setAttribute("data-theme", theme);
@@ -134,12 +143,11 @@ async function ensureFirebaseReady() {
   }
 
   if (!firebase.apps || !firebase.apps.length) {
-    const response = await fetch("/__/firebase/init.json");
-    if (!response.ok) {
-      throw new Error("Firebase 설정 정보를 가져오지 못했습니다.");
-    }
-    const config = await response.json();
-    firebase.initializeApp(config);
+    firebase.initializeApp(FIREBASE_CONFIG);
+  }
+
+  if (!firebase.firestore) {
+    throw new Error("Firestore SDK를 불러오지 못했습니다.");
   }
 
   return firebase.firestore();
