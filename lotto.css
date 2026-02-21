@@ -61,6 +61,30 @@ body {
   margin-bottom: 8px;
 }
 
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 18px;
+}
+
+.quick-links a {
+  text-decoration: none;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1px solid var(--field-border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.quick-links a:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--card);
+}
+
 .text-button {
   padding: 8px 14px;
   border-radius: 999px;
@@ -115,6 +139,32 @@ h1 {
 .description {
   margin: 12px 0 20px;
   color: var(--muted);
+}
+
+.info-grid {
+  margin: 16px 0 22px;
+  display: grid;
+  gap: 12px;
+}
+
+.info-card {
+  border: 1px solid var(--field-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  text-align: left;
+  background: var(--field-bg);
+}
+
+.info-card h3 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.info-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 0.9rem;
 }
 
 .content-section {
@@ -292,6 +342,30 @@ h2 {
   margin: 0;
   padding-left: 18px;
   line-height: 1.6;
+}
+
+.faq-list {
+  display: grid;
+  gap: 12px;
+}
+
+.faq-item {
+  border: 1px solid var(--field-border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--field-bg);
+}
+
+.faq-item h3 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.faq-item p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 0.9rem;
 }
 
 .site-footer {

@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>사람 판별 테스트</title>
+  <meta
+    name="description"
+    content="사진을 업로드하면 Teachable Machine 모델이 사람/동물로 분류하고 확률을 안내하는 이미지 판별 데모입니다."
+  />
   <link href="/style.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,12 @@
 </head>
 <body>
   <main class="app">
+    <nav class="page-nav" aria-label="페이지 이동">
+      <a href="/">로또 번호 추첨기</a>
+      <a href="#how-to">사용 방법</a>
+      <a href="#model-info">모델 정보</a>
+      <a href="#person-faq">FAQ</a>
+    </nav>
     <header class="hero">
       <p class="eyebrow">Teachable Machine · 이미지 모델</p>
       <h1>사람인지 테스트해볼까요?</h1>
@@ -52,6 +62,48 @@
         <p class="fineprint">
           이 데모는 실험용 모델이며, 실제 환경에서는 오차가 있을 수 있습니다.
         </p>
+      </div>
+    </section>
+    <section class="info-section" id="how-to">
+      <h2>사용 방법</h2>
+      <ol class="step-list">
+        <li>사진 업로드 버튼을 눌러 얼굴 또는 대상이 선명한 이미지를 선택합니다.</li>
+        <li>업로드 후 자동으로 분석되며 결과가 아래에 표시됩니다.</li>
+        <li>다른 이미지를 올리면 즉시 새로운 결과를 확인할 수 있습니다.</li>
+      </ol>
+    </section>
+    <section class="info-section" id="model-info">
+      <h2>모델 정보</h2>
+      <div class="info-grid">
+        <article class="info-card">
+          <h3>학습 목적</h3>
+          <p>사람과 동물을 구분하는 분류 모델로, 실험 및 데모용으로 제작되었습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3>데이터 처리</h3>
+          <p>업로드 이미지는 브라우저에서 분석되며 서버에 저장하지 않습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3>주의 사항</h3>
+          <p>조명, 화질, 각도에 따라 결과가 달라질 수 있습니다.</p>
+        </article>
+      </div>
+    </section>
+    <section class="info-section" id="person-faq">
+      <h2>FAQ</h2>
+      <div class="faq-list">
+        <article class="faq-item">
+          <h3>어떤 사진이 잘 나오나요?</h3>
+          <p>대상이 중앙에 있고 조명이 밝은 사진일수록 정확도가 높아집니다.</p>
+        </article>
+        <article class="faq-item">
+          <h3>사진은 저장되나요?</h3>
+          <p>저장하지 않습니다. 분석은 브라우저에서 즉시 처리됩니다.</p>
+        </article>
+        <article class="faq-item">
+          <h3>모바일에서도 되나요?</h3>
+          <p>모바일에서도 동작하며, 이미지가 작을 경우 확대해서 확인할 수 있습니다.</p>
+        </article>
       </div>
     </section>
   </main>

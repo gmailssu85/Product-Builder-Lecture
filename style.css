@@ -34,6 +34,30 @@ body {
   gap: 28px;
 }
 
+.page-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: -6px;
+}
+
+.page-nav a {
+  text-decoration: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.page-nav a:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: #fff;
+}
+
 .hero {
   background: var(--card);
   border-radius: var(--radius);
@@ -227,6 +251,73 @@ h2 {
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.5;
+}
+
+.info-section {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.info-section h2 {
+  margin-top: 0;
+}
+
+.step-list {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.info-grid {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.info-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: #f9fbff;
+}
+
+.info-card h3 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.info-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.faq-list {
+  display: grid;
+  gap: 12px;
+}
+
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #f9fbff;
+}
+
+.faq-item h3 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.faq-item p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 720px) {
