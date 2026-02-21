@@ -18,10 +18,28 @@ const FIREBASE_CONFIG = {
   measurementId: "G-NDXNPFHGBL",
 };
 
+const SUN_ICON = `
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path
+      d="M12 6.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm0-4.5a1 1 0 0 1 1 1v1.5a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 18a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1zm10-8a1 1 0 0 1-1 1h-1.5a1 1 0 0 1 0-2H21a1 1 0 0 1 1 1zM5 12a1 1 0 0 1-1 1H2.5a1 1 0 1 1 0-2H4a1 1 0 0 1 1 1zm12.95-6.36a1 1 0 0 1 0 1.41l-1.06 1.06a1 1 0 0 1-1.41-1.41l1.06-1.06a1 1 0 0 1 1.41 0zM7.52 16.78a1 1 0 0 1 0 1.41l-1.06 1.06a1 1 0 0 1-1.41-1.41l1.06-1.06a1 1 0 0 1 1.41 0zm10.43 2.47a1 1 0 0 1-1.41 0l-1.06-1.06a1 1 0 1 1 1.41-1.41l1.06 1.06a1 1 0 0 1 0 1.41zM7.52 7.22a1 1 0 0 1-1.41 0L5.05 6.16a1 1 0 0 1 1.41-1.41l1.06 1.06a1 1 0 0 1 0 1.41z"
+      fill="currentColor"
+    />
+  </svg>
+`;
+
+const MOON_ICON = `
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path
+      d="M21 14.5a8.5 8.5 0 1 1-9.5-11 1 1 0 0 1 .3 1.95 6.5 6.5 0 1 0 7.25 7.25 1 1 0 0 1 1.95.3z"
+      fill="currentColor"
+    />
+  </svg>
+`;
+
 function setTheme(theme) {
   root.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
-  themeToggleButton.textContent = theme === "dark" ? "화이트 모드" : "다크 모드";
+  themeToggleButton.innerHTML = theme === "dark" ? SUN_ICON : MOON_ICON;
 }
 
 function initTheme() {

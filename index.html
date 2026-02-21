@@ -3,61 +3,108 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>사람 판별 테스트</title>
-  <link href="/style.css" rel="stylesheet" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <meta name="google-adsense-account" content="ca-pub-2136087357305204" />
+  <title>로또 번호 생성기</title>
+  <link href="/lotto.css" rel="stylesheet" />
+  <script
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2136087357305204"
+    crossorigin="anonymous"
+  ></script>
 </head>
 <body>
-  <main class="app">
-    <header class="hero">
-      <p class="eyebrow">Teachable Machine · 이미지 모델</p>
-      <h1>사람인지 테스트해볼까요?</h1>
-      <p class="subtitle">
-        사진을 업로드하면 모델이 사람/동물로 분류하고 확률을 보여줍니다.
+  <main class="container">
+    <div class="top-bar">
+      <button id="theme-toggle" class="icon-button" type="button" aria-label="테마 전환"></button>
+      <a class="icon-button" href="/person.html" aria-label="사람 판별 테스트">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"
+            fill="currentColor"
+          />
+        </svg>
+      </a>
+    </div>
+    <h1>로또 번호 생성기</h1>
+    <p class="description">1부터 45까지 중복 없는 번호 6개를 생성합니다.</p>
+    <section class="content-section">
+      <h2>서비스 소개</h2>
+      <p>
+        이 페이지는 한국 로또(6/45) 번호를 연습용으로 생성해보는 도구입니다. 난수 기반으로
+        번호를 생성하며, 당첨을 보장하지 않습니다. 사용자가 빠르게 번호를 확인하고 기록할 수
+        있도록 단순하고 가벼운 구조로 제작했습니다.
       </p>
-      <div class="controls">
-        <label class="primary upload-button" for="file-input">사진 업로드</label>
-        <a class="ghost link-button" href="/lotto.html">로또 번호 추첨기 열기</a>
+    </section>
+    <button id="generate-button" type="button">번호 생성</button>
+    <section class="result-area" aria-live="polite">
+      <div>
+        <h2>당첨 번호</h2>
+        <div id="numbers" class="numbers"></div>
       </div>
-      <p id="status" class="status">모델을 불러오는 중...</p>
-    </header>
-
-    <section class="panel">
-      <div class="video-card">
-        <div class="video-header">
-          <h2>업로드한 이미지</h2>
-          <span id="image-state" class="badge">대기 중</span>
-        </div>
-        <div class="upload-area">
-          <img id="preview-image" class="preview" alt="업로드 미리보기" />
-          <p class="upload-hint">이미지를 선택하면 이곳에 미리보기가 표시됩니다.</p>
-        </div>
-        <input id="file-input" class="file-input" type="file" accept="image/*" />
-      </div>
-
-      <div class="result-card">
-        <div class="result-header">
-          <h2>판별 결과</h2>
-          <span id="top-result" class="badge">대기 중</span>
-        </div>
-        <div id="label-container" class="labels"></div>
-        <div class="confidence">
-          <div class="bar" id="confidence-bar"></div>
-        </div>
-        <p class="fineprint">
-          이 데모는 실험용 모델이며, 실제 환경에서는 오차가 있을 수 있습니다.
-        </p>
+      <div>
+        <h2>보너스 번호</h2>
+        <div id="bonus-number" class="bonus"></div>
       </div>
     </section>
-  </main>
+    <section class="inquiry-section">
+      <h2>제휴 문의</h2>
+      <form
+        class="inquiry-form"
+        action="https://formspree.io/f/meelrodl"
+        method="POST"
+      >
+        <label for="partner-name">이름</label>
+        <input id="partner-name" name="name" type="text" required />
 
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
-  <script defer type="text/javascript" src="/main.js"></script>
+        <label for="partner-email">이메일</label>
+        <input id="partner-email" name="email" type="email" required />
+
+        <label for="partner-company">회사명</label>
+        <input id="partner-company" name="company" type="text" />
+
+        <label for="partner-message">문의 내용</label>
+        <textarea id="partner-message" name="message" rows="4" required></textarea>
+
+        <input type="hidden" name="_subject" value="로또 페이지 제휴 문의" />
+        <button class="submit-button" type="submit">문의 보내기</button>
+      </form>
+    </section>
+    <section class="comments-section">
+      <h2>댓글</h2>
+      <form id="comment-form" class="comment-form">
+        <label for="comment-name">이름</label>
+        <input id="comment-name" name="name" type="text" maxlength="30" required />
+
+        <label for="comment-message">댓글 내용</label>
+        <textarea id="comment-message" name="message" rows="3" maxlength="300" required></textarea>
+
+        <button class="submit-button" type="submit">댓글 등록</button>
+      </form>
+      <p id="comment-status" class="comment-status"></p>
+      <ul id="comment-list" class="comment-list"></ul>
+    </section>
+    <section class="content-section">
+      <h2>번호 생성 원리</h2>
+      <p>
+        번호 생성 시 1~45 범위에서 중복 없이 6개를 선택하고, 별도로 보너스 번호 1개를 추가합니다.
+        같은 번호가 중복되지 않도록 집합(Set) 구조를 사용하며, 결과는 오름차순으로 정렬해
+        가독성을 높였습니다.
+      </p>
+    </section>
+    <section class="content-section">
+      <h2>이용 안내</h2>
+      <ul class="policy-list">
+        <li>본 서비스는 정보 제공 목적이며, 도박 권유 또는 당첨 보장을 하지 않습니다.</li>
+        <li>댓글은 운영 정책에 따라 사전 고지 없이 숨김 또는 삭제될 수 있습니다.</li>
+        <li>서비스 문의는 제휴 문의 폼을 통해 접수할 수 있습니다.</li>
+      </ul>
+    </section>
+    <footer class="site-footer">
+      <a href="/privacy.html">개인정보처리방침</a>
+      <a href="/terms.html">이용약관</a>
+      <a href="/person.html">사람 판별 테스트</a>
+    </footer>
+  </main>
+  <script defer type="text/javascript" src="/lotto.js"></script>
 </body>
 </html>
