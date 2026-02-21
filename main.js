@@ -1,210 +1,157 @@
-const generateButton = document.getElementById("generate-button");
-const numbersContainer = document.getElementById("numbers");
-const bonusNumberContainer = document.getElementById("bonus-number");
-const themeToggleButton = document.getElementById("theme-toggle");
-const commentForm = document.getElementById("comment-form");
-const commentNameInput = document.getElementById("comment-name");
-const commentMessageInput = document.getElementById("comment-message");
-const commentStatus = document.getElementById("comment-status");
-const commentList = document.getElementById("comment-list");
-const root = document.documentElement;
-const FIREBASE_CONFIG = {
-  projectId: "productionbuilderweek1",
-  appId: "1:891804464676:web:b4fd2ec6cd11a07afa8ab1",
-  storageBucket: "productionbuilderweek1.firebasestorage.app",
-  apiKey: "AIzaSyCPrsyRzWVLfAwkRWS1-mef2JTH4CD5bjo",
-  authDomain: "productionbuilderweek1.firebaseapp.com",
-  messagingSenderId: "891804464676",
-  measurementId: "G-NDXNPFHGBL",
-};
+const MODEL_URL = "https://teachablemachine.withgoogle.com/models/eWIHszlmV/";
 
-function setTheme(theme) {
-  root.setAttribute("data-theme", theme);
-  localStorage.setItem("theme", theme);
-  themeToggleButton.textContent = theme === "dark" ? "화이트 모드" : "다크 모드";
+const startButton = document.getElementById("start-button");
+const stopButton = document.getElementById("stop-button");
+const statusText = document.getElementById("status");
+const webcamContainer = document.getElementById("webcam-container");
+const labelContainer = document.getElementById("label-container");
+const topResultBadge = document.getElementById("top-result");
+const confidenceBar = document.getElementById("confidence-bar");
+const fpsBadge = document.getElementById("fps");
+
+let model;
+let webcam;
+let maxPredictions = 0;
+let running = false;
+let lastFrameTime = 0;
+
+function setStatus(message) {
+  statusText.textContent = message;
 }
 
-function initTheme() {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "dark" || savedTheme === "light") {
-    setTheme(savedTheme);
+function setButtons(active) {
+  startButton.disabled = active;
+  stopButton.disabled = !active;
+}
+
+function clearLabels() {
+  labelContainer.innerHTML = "";
+  topResultBadge.textContent = "대기 중";
+  confidenceBar.style.width = "0%";
+}
+
+async function loadModel() {
+  const modelURL = `${MODEL_URL}model.json`;
+  const metadataURL = `${MODEL_URL}metadata.json`;
+  model = await tmImage.load(modelURL, metadataURL);
+  maxPredictions = model.getTotalClasses();
+}
+
+function renderLabels(predictions) {
+  labelContainer.innerHTML = "";
+
+  predictions.forEach((prediction) => {
+    const row = document.createElement("div");
+    row.className = "label-row";
+
+    const name = document.createElement("span");
+    name.className = "label-name";
+    name.textContent = prediction.className;
+
+    const score = document.createElement("span");
+    score.className = "label-score";
+    score.textContent = `${(prediction.probability * 100).toFixed(1)}%`;
+
+    row.appendChild(name);
+    row.appendChild(score);
+    labelContainer.appendChild(row);
+  });
+}
+
+function updateTopResult(predictions) {
+  if (!predictions.length) {
+    topResultBadge.textContent = "대기 중";
+    confidenceBar.style.width = "0%";
     return;
   }
 
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  setTheme(prefersDark ? "dark" : "light");
+  const top = predictions[0];
+  topResultBadge.textContent = `${top.className} ${(top.probability * 100).toFixed(1)}%`;
+  confidenceBar.style.width = `${Math.round(top.probability * 100)}%`;
 }
 
-function toggleTheme() {
-  const currentTheme = root.getAttribute("data-theme") || "light";
-  setTheme(currentTheme === "dark" ? "light" : "dark");
-}
-
-function createUniqueNumbers(count, min, max, excludeSet = new Set()) {
-  const numbers = new Set(excludeSet);
-
-  while (numbers.size < count + excludeSet.size) {
-    const num = Math.floor(Math.random() * (max - min + 1)) + min;
-    numbers.add(num);
+function updateFps(now) {
+  if (!lastFrameTime) {
+    lastFrameTime = now;
+    return;
   }
-
-  return [...numbers].filter((n) => !excludeSet.has(n));
+  const delta = now - lastFrameTime;
+  lastFrameTime = now;
+  const fps = Math.round(1000 / Math.max(delta, 1));
+  fpsBadge.textContent = `FPS: ${fps}`;
 }
 
-function renderMainNumbers(numbers) {
-  numbersContainer.innerHTML = "";
-  numbers.forEach((num) => {
-    const ball = document.createElement("span");
-    ball.className = "ball";
-    ball.textContent = String(num);
-    numbersContainer.appendChild(ball);
-  });
+async function initCamera() {
+  const flip = true;
+  webcam = new tmImage.Webcam(360, 360, flip);
+  await webcam.setup();
+  await webcam.play();
+  webcamContainer.innerHTML = "";
+  webcamContainer.appendChild(webcam.canvas);
 }
 
-function renderBonusNumber(num) {
-  bonusNumberContainer.textContent = String(num);
-}
-
-function generateLottoNumbers() {
-  const mainNumbers = createUniqueNumbers(6, 1, 45).sort((a, b) => a - b);
-  const bonusNumber = createUniqueNumbers(1, 1, 45, new Set(mainNumbers))[0];
-
-  renderMainNumbers(mainNumbers);
-  renderBonusNumber(bonusNumber);
-}
-
-function formatCreatedAt(timestamp) {
-  if (!timestamp || typeof timestamp.toDate !== "function") {
-    return "방금 전";
+async function loop(timestamp) {
+  if (!running) {
+    return;
   }
-
-  return timestamp.toDate().toLocaleString("ko-KR");
+  webcam.update();
+  updateFps(timestamp);
+  await predict();
+  window.requestAnimationFrame(loop);
 }
 
-function renderComments(docs) {
-  commentList.innerHTML = "";
+async function predict() {
+  const predictions = await model.predict(webcam.canvas);
+  predictions.sort((a, b) => b.probability - a.probability);
+  renderLabels(predictions);
+  updateTopResult(predictions);
+}
 
-  if (!docs.length) {
-    const emptyItem = document.createElement("li");
-    emptyItem.className = "comment-item";
-    emptyItem.textContent = "첫 댓글을 남겨보세요.";
-    commentList.appendChild(emptyItem);
+async function start() {
+  if (running) {
     return;
   }
 
-  docs.forEach((doc) => {
-    const data = doc.data();
-    const item = document.createElement("li");
-    item.className = "comment-item";
-
-    const meta = document.createElement("div");
-    meta.className = "comment-meta";
-
-    const author = document.createElement("strong");
-    author.textContent = data.name || "익명";
-
-    const date = document.createElement("span");
-    date.textContent = formatCreatedAt(data.createdAt);
-
-    meta.appendChild(author);
-    meta.appendChild(date);
-
-    const message = document.createElement("p");
-    message.className = "comment-message";
-    message.textContent = data.message || "";
-
-    item.appendChild(meta);
-    item.appendChild(message);
-    commentList.appendChild(item);
-  });
-}
-
-function setCommentStatus(message) {
-  commentStatus.textContent = message;
-}
-
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = src;
-    script.async = true;
-    script.onload = resolve;
-    script.onerror = () => reject(new Error(`스크립트 로드 실패: ${src}`));
-    document.head.appendChild(script);
-  });
-}
-
-async function ensureFirebaseReady() {
-  if (!window.firebase) {
-    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js");
-    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js");
-  } else if (!firebase.firestore) {
-    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js");
-  }
-
-  if (!firebase.apps || !firebase.apps.length) {
-    firebase.initializeApp(FIREBASE_CONFIG);
-  }
-
-  if (!firebase.firestore) {
-    throw new Error("Firestore SDK를 불러오지 못했습니다.");
-  }
-
-  return firebase.firestore();
-}
-
-async function initFirebaseComments() {
-  let db;
   try {
-    db = await ensureFirebaseReady();
+    setStatus("모델을 불러오는 중...");
+    setButtons(true);
+    clearLabels();
+
+    if (!model) {
+      await loadModel();
+    }
+
+    setStatus("카메라 준비 중...");
+    await initCamera();
+
+    running = true;
+    setStatus("분석 중입니다. 카메라를 향해 주세요.");
+    window.requestAnimationFrame(loop);
   } catch (error) {
-    setCommentStatus("Firebase 초기화에 실패했습니다. Firebase Hosting 배포 상태를 확인해 주세요.");
+    running = false;
+    setButtons(false);
+    setStatus("카메라를 시작할 수 없습니다. 권한을 확인해 주세요.");
+  }
+}
+
+function stop() {
+  if (!running) {
     return;
   }
 
-  const commentsRef = db.collection("lotto-comments");
+  running = false;
+  setButtons(false);
+  setStatus("중지되었습니다. 다시 시작할 수 있습니다.");
+  clearLabels();
+  fpsBadge.textContent = "FPS: --";
 
-  commentsRef
-    .orderBy("createdAt", "desc")
-    .limit(50)
-    .onSnapshot(
-      (snapshot) => {
-        renderComments(snapshot.docs);
-      },
-      () => {
-        setCommentStatus("댓글을 불러오지 못했습니다.");
-      }
-    );
-
-  commentForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const name = commentNameInput.value.trim();
-    const message = commentMessageInput.value.trim();
-
-    if (!name || !message) {
-      setCommentStatus("이름과 댓글 내용을 입력해 주세요.");
-      return;
-    }
-
-    try {
-      setCommentStatus("댓글 저장 중...");
-      await commentsRef.add({
-        name,
-        message,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      commentMessageInput.value = "";
-      setCommentStatus("댓글이 등록되었습니다.");
-    } catch (error) {
-      setCommentStatus("댓글 등록에 실패했습니다. Firestore 권한을 확인해 주세요.");
-    }
-  });
+  if (webcam) {
+    webcam.stop();
+  }
 }
 
-themeToggleButton.addEventListener("click", toggleTheme);
-generateButton.addEventListener("click", generateLottoNumbers);
+startButton.addEventListener("click", start);
+stopButton.addEventListener("click", stop);
 
-initTheme();
-generateLottoNumbers();
-initFirebaseComments();
+setButtons(false);
+clearLabels();
