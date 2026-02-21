@@ -150,7 +150,7 @@ async function loadFirebaseConfig() {
   }
   const response = await fetch("/__/firebase/init.json");
   if (!response.ok) {
-    throw new Error("Firebase 설정을 불러오지 못했습니다.");
+    throw new Error("Firebase 설정 응답이 올바르지 않습니다.");
   }
   firebaseConfig = await response.json();
   return firebaseConfig;
@@ -165,8 +165,17 @@ async function ensureFirebaseReady() {
   }
 
   if (!firebase.apps || !firebase.apps.length) {
-    const config = await loadFirebaseConfig();
-    firebase.initializeApp(config);
+    try {
+      const config = await loadFirebaseConfig();
+      firebase.initializeApp(config);
+    } catch (error) {
+      // Fallback: Firebase Hosting에서 제공하는 init.js 사용
+      try {
+        await loadScript("/__/firebase/init.js");
+      } catch (initError) {
+        throw error;
+      }
+    }
   }
 
   if (!firebase.firestore) {
