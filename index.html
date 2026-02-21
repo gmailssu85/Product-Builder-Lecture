@@ -1,15 +1,28 @@
 
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>로또 번호 생성기</title>
+  <link href="/style.css" rel="stylesheet" />
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
+  <main class="container">
+    <h1>로또 번호 생성기</h1>
+    <p class="description">1부터 45까지 중복 없는 번호 6개를 생성합니다.</p>
+    <button id="generate-button" type="button">번호 생성</button>
+    <section class="result-area" aria-live="polite">
+      <div>
+        <h2>당첨 번호</h2>
+        <div id="numbers" class="numbers"></div>
+      </div>
+      <div>
+        <h2>보너스 번호</h2>
+        <div id="bonus-number" class="bonus"></div>
+      </div>
+    </section>
+  </main>
   <script defer type="text/javascript" src="/main.js"></script>
 </body>
 </html>

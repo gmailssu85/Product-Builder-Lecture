@@ -1,1 +1,91 @@
-/* Add styles here */
+:root {
+  --bg: #fff8ea;
+  --card: #ffffff;
+  --text: #262626;
+  --accent: #ff7a18;
+  --accent-dark: #d35e08;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  background: linear-gradient(160deg, var(--bg), #ffe1c6);
+  color: var(--text);
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.container {
+  width: min(560px, 100%);
+  background: var(--card);
+  border-radius: 16px;
+  padding: 28px 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+}
+
+.description {
+  margin: 12px 0 20px;
+  color: #5a5a5a;
+}
+
+#generate-button {
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#generate-button:hover {
+  background: var(--accent-dark);
+}
+
+.result-area {
+  margin-top: 24px;
+  display: grid;
+  gap: 20px;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.numbers {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ball,
+.bonus {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 700;
+  color: #fff;
+  background: #ff9f47;
+}
+
+.bonus {
+  margin: 0 auto;
+  background: #ff5858;
+}
