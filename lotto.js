@@ -143,34 +143,25 @@ function loadScript(src) {
   });
 }
 
+async function loadFirebaseConfig() {
+  const response = await fetch("/__/firebase/init.json");
+  if (!response.ok) {
+    throw new Error("Firebase 설정 응답이 올바르지 않습니다.");
+  }
+  return response.json();
+}
+
 async function ensureFirebaseReady() {
   if (!window.firebase) {
-    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js");
-    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js");
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.5/firebase-app-compat.min.js");
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.5/firebase-firestore-compat.min.js");
   } else if (!firebase.firestore) {
-    await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js");
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.5/firebase-firestore-compat.min.js");
   }
 
   if (!firebase.apps || !firebase.apps.length) {
-    let initError;
-    try {
-      await loadScript("/__/firebase/init.js");
-    } catch (error) {
-      initError = error;
-    }
-
-    if (!firebase.apps || !firebase.apps.length) {
-      try {
-        const response = await fetch("/__/firebase/init.json");
-        if (!response.ok) {
-          throw new Error("Firebase 설정 응답이 올바르지 않습니다.");
-        }
-        const config = await response.json();
-        firebase.initializeApp(config);
-      } catch (error) {
-        throw initError || error;
-      }
-    }
+    const config = await loadFirebaseConfig();
+    firebase.initializeApp(config);
   }
 
   if (!firebase.firestore) {
