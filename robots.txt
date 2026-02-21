@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://productionbuilderweek1.web.app/sitemap.xml

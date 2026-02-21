@@ -80,6 +80,17 @@ h1 {
   color: var(--muted);
 }
 
+.content-section {
+  margin-top: 24px;
+  text-align: left;
+}
+
+.content-section p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text);
+}
+
 #generate-button {
   border: none;
   border-radius: 10px;
@@ -238,4 +249,30 @@ h2 {
   margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.policy-list {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.6;
+}
+
+.site-footer {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1px solid var(--field-border);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.site-footer a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
 }
