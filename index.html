@@ -18,23 +18,26 @@
       <p class="eyebrow">Teachable Machine · 이미지 모델</p>
       <h1>사람인지 테스트해볼까요?</h1>
       <p class="subtitle">
-        카메라를 켜면 모델이 사람/동물로 분류하고 확률을 실시간으로 보여줍니다.
+        사진을 업로드하면 모델이 사람/동물로 분류하고 확률을 보여줍니다.
       </p>
       <div class="controls">
-        <button id="start-button" type="button" class="primary">카메라 시작</button>
-        <button id="stop-button" type="button" class="ghost" disabled>카메라 중지</button>
+        <label class="primary upload-button" for="file-input">사진 업로드</label>
+        <a class="ghost link-button" href="/lotto.html">로또 번호 추첨기 열기</a>
       </div>
-      <p id="status" class="status">시작 버튼을 눌러 카메라 권한을 허용해 주세요.</p>
+      <p id="status" class="status">모델을 불러오는 중...</p>
     </header>
 
     <section class="panel">
       <div class="video-card">
         <div class="video-header">
-          <h2>실시간 입력</h2>
-          <span id="fps" class="badge">FPS: --</span>
+          <h2>업로드한 이미지</h2>
+          <span id="image-state" class="badge">대기 중</span>
         </div>
-        <div id="webcam-container" class="webcam"></div>
-        <p class="hint">카메라가 비추는 대상이 중앙에 오도록 맞춰주세요.</p>
+        <div class="upload-area">
+          <img id="preview-image" class="preview" alt="업로드 미리보기" />
+          <p class="upload-hint">이미지를 선택하면 이곳에 미리보기가 표시됩니다.</p>
+        </div>
+        <input id="file-input" class="file-input" type="file" accept="image/*" />
       </div>
 
       <div class="result-card">
