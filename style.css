@@ -172,3 +172,12 @@ h2 {
 .submit-button:hover {
   background: var(--accent-dark);
 }
+
+.comments-section {
+  margin-top: 28px;
+  text-align: left;
+}
+
+.comments-section h2 {
+  margin-bottom: 14px;
+}
