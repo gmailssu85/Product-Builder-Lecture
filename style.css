@@ -1,9 +1,27 @@
 :root {
-  --bg: #fff8ea;
+  --bg-start: #fff8ea;
+  --bg-end: #ffe1c6;
   --card: #ffffff;
   --text: #262626;
+  --muted: #5a5a5a;
   --accent: #ff7a18;
   --accent-dark: #d35e08;
+  --ball: #ff9f47;
+  --bonus: #ff5858;
+  --shadow: rgba(0, 0, 0, 0.12);
+}
+
+:root[data-theme="dark"] {
+  --bg-start: #17181c;
+  --bg-end: #222631;
+  --card: #2b3140;
+  --text: #f2f4f8;
+  --muted: #c2cad6;
+  --accent: #ff9a3d;
+  --accent-dark: #ef7d10;
+  --ball: #f2a93b;
+  --bonus: #ff6a6a;
+  --shadow: rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -13,21 +31,40 @@
 body {
   margin: 0;
   font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
-  background: linear-gradient(160deg, var(--bg), #ffe1c6);
+  background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
   color: var(--text);
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 20px;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 .container {
   width: min(560px, 100%);
   background: var(--card);
   border-radius: 16px;
-  padding: 28px 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  box-shadow: 0 10px 25px var(--shadow);
   text-align: center;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.theme-toggle {
+  border: 1px solid var(--muted);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 7px 12px;
+  cursor: pointer;
 }
 
 h1 {
@@ -36,7 +73,7 @@ h1 {
 
 .description {
   margin: 12px 0 20px;
-  color: #5a5a5a;
+  color: var(--muted);
 }
 
 #generate-button {
@@ -82,10 +119,10 @@ h2 {
   place-items: center;
   font-weight: 700;
   color: #fff;
-  background: #ff9f47;
+  background: var(--ball);
 }
 
 .bonus {
   margin: 0 auto;
-  background: #ff5858;
+  background: var(--bonus);
 }
