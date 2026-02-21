@@ -8,15 +8,7 @@ const commentMessageInput = document.getElementById("comment-message");
 const commentStatus = document.getElementById("comment-status");
 const commentList = document.getElementById("comment-list");
 const root = document.documentElement;
-const FIREBASE_CONFIG = {
-  projectId: "productionbuilderweek1",
-  appId: "1:891804464676:web:b4fd2ec6cd11a07afa8ab1",
-  storageBucket: "productionbuilderweek1.firebasestorage.app",
-  apiKey: "AIzaSyCPrsyRzWVLfAwkRWS1-mef2JTH4CD5bjo",
-  authDomain: "productionbuilderweek1.firebaseapp.com",
-  messagingSenderId: "891804464676",
-  measurementId: "G-NDXNPFHGBL",
-};
+let firebaseConfig;
 
 const SUN_ICON = `
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -152,6 +144,18 @@ function loadScript(src) {
   });
 }
 
+async function loadFirebaseConfig() {
+  if (firebaseConfig) {
+    return firebaseConfig;
+  }
+  const response = await fetch("/__/firebase/init.json");
+  if (!response.ok) {
+    throw new Error("Firebase 설정을 불러오지 못했습니다.");
+  }
+  firebaseConfig = await response.json();
+  return firebaseConfig;
+}
+
 async function ensureFirebaseReady() {
   if (!window.firebase) {
     await loadScript("https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js");
@@ -161,7 +165,8 @@ async function ensureFirebaseReady() {
   }
 
   if (!firebase.apps || !firebase.apps.length) {
-    firebase.initializeApp(FIREBASE_CONFIG);
+    const config = await loadFirebaseConfig();
+    firebase.initializeApp(config);
   }
 
   if (!firebase.firestore) {
